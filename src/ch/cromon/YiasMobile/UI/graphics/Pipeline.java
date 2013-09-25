@@ -17,9 +17,24 @@ public class Pipeline {
 	}
 
 	private InputGeometry mCurInput;
+	private TextureInput mTexInput;
 
 	public void setInputGeometry(InputGeometry geom) {
 		mCurInput = geom;
+	}
+
+	public void setTextureInput(TextureInput texInput) {
+		mTexInput = texInput;
+	}
+
+	public void setInputs(InputGeometry geom, TextureInput tex) {
+		setInputGeometry(geom);
+		setTextureInput(tex);
+	}
+
+	public void clearInputs() {
+		setInputGeometry(null);
+		setTextureInput(null);
 	}
 
 	public void render() {
@@ -45,7 +60,15 @@ public class Pipeline {
 			geom.getIndexBuffer().bind();
 		}
 
+		if(mTexInput != null) {
+			mTexInput.apply();
+		}
+
 		GLES20.glDrawElements(geom.getLayout().getGLValue(), indexCount, GLES20.GL_UNSIGNED_INT, 0);
+
+		if(mTexInput != null) {
+			mTexInput.remove();
+		}
 
 		if(geom.getIndexBuffer() != null) {
 			geom.getIndexBuffer().unbind();

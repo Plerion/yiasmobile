@@ -55,9 +55,15 @@ public class UIManager {
 	}
 
 	public void onDeviceReady() {
+		mSurface.initRendering();
+
 		ProgramCollection.getInstance().init();
 
 		WorldFrame.getInstance().init();
+	}
+
+	public GLSurface getSurface() {
+		return mSurface;
 	}
 
     private void onStartup(Bundle savedInstance) {

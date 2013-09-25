@@ -70,6 +70,12 @@ public class Program {
 		unbind();
 	}
 
+	public void setSampler(int index, int textureNumber) {
+		bind();
+		GLES20.glUniform1i(index, textureNumber);
+		unbind();
+	}
+
 	private void compileShaders(String vertex, String fragment) {
 		mVertexShader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
 		mFragmentShader = GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);

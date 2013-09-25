@@ -1,10 +1,10 @@
 package ch.cromon.YiasMobile.io;
 
 import android.content.Context;
+import android.os.Environment;
 import ch.cromon.YiasMobile.UI.MainWindow;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,6 +26,18 @@ public class ResourceManager {
 		try {
 			return ctx.getAssets().open(name);
 		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	public RandomAccessStream getFile(String file) {
+		File sdcard = Environment.getExternalStorageDirectory();
+
+		File assetFile = new File(sdcard, "World Of Warcraft/" + file);
+
+		try {
+			return new RandomAccessStream(new RandomAccessFile(assetFile, "r"));
+		} catch (FileNotFoundException e) {
 			return null;
 		}
 	}
