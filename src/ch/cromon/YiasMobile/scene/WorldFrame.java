@@ -1,13 +1,14 @@
 package ch.cromon.YiasMobile.scene;
 
 import android.opengl.GLSurfaceView;
-import ch.cromon.YiasMobile.UI.MainWindow;
 import ch.cromon.YiasMobile.UI.UIManager;
+import ch.cromon.YiasMobile.UI.elements.Button;
+import ch.cromon.YiasMobile.UI.elements.UIQuad;
 import ch.cromon.YiasMobile.UI.graphics.*;
+import ch.cromon.YiasMobile.io.InputManager;
 import ch.cromon.YiasMobile.math.Matrix;
+import ch.cromon.YiasMobile.math.Vector2;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 
 /**
@@ -28,12 +29,13 @@ public class WorldFrame implements Camera.MatrixChangedEventListener {
 	private PerspectiveCamera mPerspCamera = null;
 	private OrthoCamera mOrthoCamera = null;
 
-	private InputGeometry geom = new InputGeometry();
-	private TextureInput mTexInput;
-
 	private ArrayList<ProgramUpdateHolder> mUpdateHolders = new ArrayList<ProgramUpdateHolder>();
 
+	private Button mButton;
+
 	public void init() {
+		InputManager.getInstance().init();
+
 		TextureManager.getInstance().loadDefaultTexture();
 
 		for(Program prog : ProgramCollection.getInstance().getAllPrograms()) {
@@ -45,60 +47,9 @@ public class WorldFrame implements Camera.MatrixChangedEventListener {
 
 		setActiveCamera(mOrthoCamera);
 
-		geom.setVertexCount(4);
-		geom.addElement(Semantic.Position, 0, 2);
-		geom.addElement(Semantic.Color, 0, 4, Component.Byte, true);
-		geom.addElement(Semantic.TexCoord, 0, 2);
-		geom.setLayout(InputLayout.TriangleFan);
-		geom.setTriangleCount(2);
-		geom.setProgram(ProgramCollection.getInstance().getProgram("UIQuad"));
+		UIQuad.init();
 
-		Buffer vbuffer = new Buffer();
-		ByteBuffer bbuffer = ByteBuffer.allocateDirect(4 * (8 + 4 + 8)).order(ByteOrder.nativeOrder());
-		float[][] vertices = new float[4][2];
-		vertices[0][0] = 0;
-		vertices[0][1] = 0;
-		vertices[1][0] = 50;
-		vertices[1][1] = 0;
-		vertices[2][0] = 50;
-		vertices[2][1] = 50;
-		vertices[3][0] = 0;
-		vertices[3][1] = 50;
-
-		int[] colors = {
-			0xFFFF0000,
-			0xFF00FF00,
-			0xFF0000FF,
-			0xFFFF7F3F
-		};
-
-		float[][] texCoords = {
-			{ 0, 0},
-			{ 1, 0 },
-			{ 1, 1 },
-			{ 0, 1 }
-		};
-
-		for(int i = 0; i < 4; ++i) {
-			bbuffer.putFloat(vertices[i][0]).putFloat(vertices[i][1]).putInt(colors[i]).putFloat(texCoords[i][0]).putFloat(texCoords[i][1]);
-		}
-
-		vbuffer.setData(bbuffer);
-		geom.setVertexBuffer(vbuffer);
-
-		Buffer indexBuffer = new Buffer(true);
-		ByteBuffer index = ByteBuffer.allocate(4 * 4).order(ByteOrder.nativeOrder());
-		index.putInt(0).putInt(1).putInt(2).putInt(3);
-		indexBuffer.setData(index);
-
-		geom.setIndexBuffer(indexBuffer);
-
-		geom.create();
-
-		mTexInput = new TextureInput(geom.getProgram());
-		mTexInput.defineTexture("baseSampler");
-
-		mTexInput.setTexture(0, TextureManager.getInstance().getTexture("Interface/Buttons/BLUEGRAD64.blp"));
+		mButton = new Button();
 	}
 
 	public void invokeOnRenderThread(Runnable task) {
@@ -116,9 +67,7 @@ public class WorldFrame implements Camera.MatrixChangedEventListener {
 	}
 
 	public void onFrame() {
-		Pipeline.getInstance().setInputs(geom, mTexInput);
-		Pipeline.getInstance().render();
-		Pipeline.getInstance().clearInputs();
+		mButton.draw();
 	}
 
 	@Override
