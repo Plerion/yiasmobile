@@ -87,6 +87,13 @@ public class UIQuad {
 		updateVertexBuffer();
 	}
 
+	public void setMetrics(Vector2 pos, Vector2 size) {
+		mPosition = pos;
+		mSize = size;
+
+		updateVertexBuffer();
+	}
+
 	public void draw() {
 		gTexInput.setTexture(0, mTexture);
 		gInputGeometry.setVertexBuffer(mVertexBuffer);

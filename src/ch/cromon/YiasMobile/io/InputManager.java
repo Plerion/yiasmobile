@@ -3,6 +3,7 @@ package ch.cromon.YiasMobile.io;
 import android.view.MotionEvent;
 import android.view.View;
 import ch.cromon.YiasMobile.UI.UIManager;
+import ch.cromon.YiasMobile.UI.messaging.UITouchMessage;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +11,7 @@ import ch.cromon.YiasMobile.UI.UIManager;
  * Date: 25.09.13
  * Time: 19:08
  */
-public class InputManager implements View.OnTouchListener {
+public class InputManager {
  	private static InputManager gInstance = new InputManager();
 
 	public static InputManager getInstance() {
@@ -21,12 +22,11 @@ public class InputManager implements View.OnTouchListener {
 
 	}
 
-	public void init() {
-		UIManager.getInstance().getSurface().getView().setOnTouchListener(this);
-	}
+	public boolean onTouch(MotionEvent motionEvent) {
 
-	@Override
-	public boolean onTouch(View view, MotionEvent motionEvent) {
+		UITouchMessage msg = new UITouchMessage(motionEvent);
+
+		UIManager.getInstance().dispatchMessage(msg);
 		return false;
 	}
 }

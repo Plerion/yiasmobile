@@ -1,7 +1,10 @@
 package ch.cromon.YiasMobile.UI;
 
 import android.os.Bundle;
+import ch.cromon.YiasMobile.UI.elements.MatrixStack;
+import ch.cromon.YiasMobile.UI.elements.UIRoot;
 import ch.cromon.YiasMobile.UI.graphics.ProgramCollection;
+import ch.cromon.YiasMobile.UI.messaging.UIMessage;
 import ch.cromon.YiasMobile.scene.WorldFrame;
 
 /**
@@ -21,6 +24,8 @@ public class UIManager {
     private boolean mIsLoaded = false;
 	private GLSurface mSurface;
 	private GLRenderer mRenderer;
+	private MatrixStack mUIMatrixStack = new MatrixStack();
+	private UIRoot mUIRoot = new UIRoot();
 
     public UIManager() {
 
@@ -70,5 +75,21 @@ public class UIManager {
 		mIsLoaded = true;
 
 
+	}
+
+	public void dispatchMessage(UIMessage message) {
+		mUIRoot.dispatchMessage(message);
+	}
+
+	public MatrixStack getMatrixStack() {
+		return mUIMatrixStack;
+	}
+
+	public UIRoot getUIRoot() {
+		return mUIRoot;
+	}
+
+	public void renderUI() {
+		mUIRoot.draw();
 	}
 }

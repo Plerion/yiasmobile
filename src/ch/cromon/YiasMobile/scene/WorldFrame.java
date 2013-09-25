@@ -3,12 +3,15 @@ package ch.cromon.YiasMobile.scene;
 import android.opengl.GLSurfaceView;
 import ch.cromon.YiasMobile.UI.UIManager;
 import ch.cromon.YiasMobile.UI.elements.Button;
+import ch.cromon.YiasMobile.UI.elements.Frame;
 import ch.cromon.YiasMobile.UI.elements.UIQuad;
 import ch.cromon.YiasMobile.UI.graphics.*;
 import ch.cromon.YiasMobile.io.InputManager;
 import ch.cromon.YiasMobile.math.Matrix;
 import ch.cromon.YiasMobile.math.Vector2;
+import ch.cromon.YiasMobile.models.adt.MapArea;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -31,11 +34,7 @@ public class WorldFrame implements Camera.MatrixChangedEventListener {
 
 	private ArrayList<ProgramUpdateHolder> mUpdateHolders = new ArrayList<ProgramUpdateHolder>();
 
-	private Button mButton;
-
 	public void init() {
-		InputManager.getInstance().init();
-
 		TextureManager.getInstance().loadDefaultTexture();
 
 		for(Program prog : ProgramCollection.getInstance().getAllPrograms()) {
@@ -47,9 +46,16 @@ public class WorldFrame implements Camera.MatrixChangedEventListener {
 
 		setActiveCamera(mOrthoCamera);
 
+		updateUniform(UniformType.MatUI, new Matrix());
+
 		UIQuad.init();
 
-		mButton = new Button();
+		MapArea area = new MapArea("World/Maps/Kalimdor/Kalimdor_40_29.adt", 40, 29);
+		try {
+			area.asyncLoad();
+		} catch (IOException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
 	}
 
 	public void invokeOnRenderThread(Runnable task) {
@@ -66,8 +72,14 @@ public class WorldFrame implements Camera.MatrixChangedEventListener {
 		}
 	}
 
+	public OrthoCamera getOrthoCamera() {
+		return mOrthoCamera;
+	}
+
 	public void onFrame() {
-		mButton.draw();
+
+		setActiveCamera(mOrthoCamera);
+		UIManager.getInstance().renderUI();
 	}
 
 	@Override
@@ -78,6 +90,12 @@ public class WorldFrame implements Camera.MatrixChangedEventListener {
 
 		for(ProgramUpdateHolder holder : mUpdateHolders) {
 			holder.updateUniform(view ? UniformType.MatView : UniformType.MatProj, matrix);
+		}
+	}
+
+	public void updateUniform(UniformType type, Matrix mat) {
+		for(ProgramUpdateHolder holder : mUpdateHolders) {
+			holder.updateUniform(type, mat);
 		}
 	}
 }

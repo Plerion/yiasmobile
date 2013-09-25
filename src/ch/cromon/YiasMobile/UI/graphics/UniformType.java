@@ -10,7 +10,8 @@ package ch.cromon.YiasMobile.UI.graphics;
 public enum UniformType {
 	MatView ("matView"),
 	MatProj ("matProj"),
-	MatWorld ("matWorld");
+	MatWorld ("matWorld"),
+	MatUI("matUI");
 
 	private final String uniformName;
 

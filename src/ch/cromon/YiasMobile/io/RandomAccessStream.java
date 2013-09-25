@@ -11,20 +11,21 @@ import java.io.RandomAccessFile;
  * Time: 15:20
  */
 public class RandomAccessStream {
-	private long mCurPosition = 0;
 	RandomAccessFile mFile;
 
 	public RandomAccessStream(RandomAccessFile file) {
 		mFile = file;
 	}
 
+	public RandomAccessStream() {
+
+	}
+
 	public int read() throws IOException {
-		++mCurPosition;
 		return mFile.read();
 	}
 
 	public void seek(long position) throws IOException {
-		mCurPosition = position;
 		mFile.seek(position);
 	}
 
@@ -38,12 +39,23 @@ public class RandomAccessStream {
 		return ret;
 	}
 
+	public float readFloat() throws IOException {
+		int ival = readInt();
+		return Float.intBitsToFloat(ival);
+	}
+
+	public long readLong() throws IOException {
+		long v1 = readInt() & 0xFFFFFFFF;
+		long v2 = readInt() & 0xFFFFFFFF;
+
+		return (v1 | (v2 << 32));
+	}
+
 	public byte readByte() throws IOException {
 		return (byte)(read() & 0xFF);
 	}
 
 	public void readFully(byte[] data) throws IOException {
 		mFile.read(data);
-		mCurPosition += data.length;
 	}
 }

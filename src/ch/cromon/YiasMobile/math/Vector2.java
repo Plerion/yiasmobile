@@ -19,6 +19,15 @@ public class Vector2 {
 		this.y = y;
 	}
 
+	public Vector2 clone() {
+		return new Vector2(x, y);
+	}
+
+	public void takeBigger(Vector2 v) {
+		x = Math.max(x, v.x);
+		y = Math.max(y, v.y);
+	}
+
 	public static Vector2 FromMotionEvent(MotionEvent event, int pointer) {
 		PointerCoords pc = new PointerCoords();
 		event.getPointerCoords(pointer, pc);

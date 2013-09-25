@@ -8,6 +8,5 @@ package ch.cromon.YiasMobile.UI.messaging;
  */
 public enum MessageKind {
 	Touch,
-	Keyboard,
 	Other;
 }

@@ -11,6 +11,6 @@ public enum MessageType {
 	TouchUp,
 	TouchMove,
 	NCTouchMove,
-	NCTouchDow,
+	NCTouchDown,
 	NCTouchUp;
 }
