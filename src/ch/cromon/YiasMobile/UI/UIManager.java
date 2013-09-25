@@ -46,6 +46,14 @@ public class UIManager {
 		}
     }
 
+	public int getWidth() {
+		return mSurface.getView().getWidth();
+	}
+
+	public int getHeight() {
+		return mSurface.getView().getHeight();
+	}
+
 	public void onDeviceReady() {
 		ProgramCollection.getInstance().init();
 

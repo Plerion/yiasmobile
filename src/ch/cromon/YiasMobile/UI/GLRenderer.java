@@ -36,6 +36,9 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		gl.glClearColor(0, 0, 0, 0);
 
+		mWidth = UIManager.getInstance().getWidth();
+		mHeight = UIManager.getInstance().getHeight();
+
 		UIManager.getInstance().onDeviceReady();
 	}
 

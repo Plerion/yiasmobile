@@ -2,6 +2,7 @@ package ch.cromon.YiasMobile.UI.graphics;
 
 import android.opengl.GLES20;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -49,14 +50,26 @@ public class Buffer {
 	}
 
 	public void setData(IntBuffer data) {
+		data.position(0);
+
 		GLES20.glBindBuffer(mTarget, mBuffer);
-		GLES20.glBufferData(mTarget, data.limit() * 4, data, GLES20.GL_STATIC_DRAW);
+		GLES20.glBufferData(mTarget, data.limit(), data, GLES20.GL_STATIC_DRAW);
 		GLES20.glBindBuffer(mTarget, 0);
 	}
 
 	public void setData(FloatBuffer data) {
+		data.position(0);
+
 		GLES20.glBindBuffer(mTarget, mBuffer);
-		GLES20.glBufferData(mTarget, data.limit() * 4, data, GLES20.GL_STATIC_DRAW);
+		GLES20.glBufferData(mTarget, data.limit(), data, GLES20.GL_STATIC_DRAW);
+		GLES20.glBindBuffer(mTarget, 0);
+	}
+
+	public void setData(ByteBuffer data) {
+		data.position(0);
+
+		GLES20.glBindBuffer(mTarget, mBuffer);
+		GLES20.glBufferData(mTarget, data.limit(), data, GLES20.GL_STATIC_DRAW);
 		GLES20.glBindBuffer(mTarget, 0);
 	}
 }

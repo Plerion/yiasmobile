@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class Camera {
 	public interface MatrixChangedEventListener
 	{
-		public void matrixChanged(boolean view, Matrix matrix);
+		public void matrixChanged(Camera camera, boolean view, Matrix matrix);
 	}
 
 	protected Matrix mView, mProjection;
@@ -36,13 +36,13 @@ public class Camera {
 
 	protected void viewChanged() {
 		for(MatrixChangedEventListener e : mEventListeners) {
-			e.matrixChanged(true, mView);
+			e.matrixChanged(this, true, mView);
 		}
 	}
 
 	protected void projChanged() {
 		for(MatrixChangedEventListener e : mEventListeners) {
-			e.matrixChanged(false, mProjection);
+			e.matrixChanged(this, false, mProjection);
 		}
 	}
 

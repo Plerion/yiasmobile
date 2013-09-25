@@ -53,13 +53,14 @@ public class VertexElement {
 				throw new IllegalStateException("Vertex element has a illegal semantic");
 		}
 
-		attribName += Integer.toString(mAttribIndex);
+		attribName += Integer.toString(mIndex);
 		mAttribIndex = GLES20.glGetAttribLocation(program, attribName);
 
 		mElemSize = (mType == Component.Float ? 4 : 1) * mComponentCount;
 	}
 
 	public void setAttribPointer(int stride, int offset) {
+		GLES20.glEnableVertexAttribArray(mAttribIndex);
 		GLES20.glVertexAttribPointer(mAttribIndex, mComponentCount, mType == Component.Float ? GLES20.GL_FLOAT : GLES20.GL_UNSIGNED_BYTE, mNormalized, stride, offset);
 	}
 
